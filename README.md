@@ -2,17 +2,15 @@
 Mind Mesh is an app that promotes mental wellness through journaling, mood tracking, and local support resources.
 
 ## Installation
-1. Create a python virtual environment
-```bash Terminal
-mkdir mind-mesh
-cd mind-mesh
-python3 -m venv .venv
-source .venv/bin/activate
-```
-
-2. Clone the repository
+1. Clone the repository
 ```bash
 git clone https://github.com/Justcosa/Mind-Mesh.git
+```
+
+2. Create a python virtual environment inside the folder
+```bash Terminal
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
 3. Install dependencies with pip

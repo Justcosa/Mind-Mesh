@@ -2,17 +2,26 @@ import flet as ft
 import requests
 from datetime import datetime
 from utils.validation import validation
+from utils.colors import customBgColor, customTextcolor2
 
 class logWindow(ft.Container):
     def __init__(self, page: ft.Page):
         super().__init__()
 
         self.expand = True
+        self.bgcolor = customBgColor
 
         validator = validation()
 
         mood_field = ft.TextField(label="Enter your mood here")
-        log_field = ft.TextField(label="Journal Entry", multiline=True, min_lines=3, max_lines=10)
+        log_field = ft.TextField(
+            label="Journal Entry",
+            multiline=True,
+            min_lines=10,
+            max_lines=50,
+            width=400,      # Set a wider field
+            height=100      # Set a taller field
+        )
         validation_text = ft.Text("", color="red")
 
         def go_to_startup(e):
@@ -49,13 +58,15 @@ class logWindow(ft.Container):
             page.update()
 
         self.content = ft.Row(
+            alignment=ft.MainAxisAlignment.CENTER,           # Center horizontally
+            vertical_alignment=ft.CrossAxisAlignment.CENTER, # Center vertically
             controls=[
                 ft.Container(
                     content=ft.Column(
                         alignment=ft.MainAxisAlignment.CENTER,
                         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                         controls=[
-                            ft.Text("New Entry", color="black", size=30, weight=ft.FontWeight.BOLD),
+                            ft.Text("New Entry", color=customTextcolor2, size=30, weight=ft.FontWeight.BOLD),
                             mood_field,
                             log_field,
                             ft.ElevatedButton("Submit", on_click=submit_entry),

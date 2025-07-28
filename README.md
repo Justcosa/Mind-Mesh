@@ -41,8 +41,8 @@ You will need to open a new terminal window to run the file.
 flet run main.py
 ```
 
-##Closing the app
-###In both terminals press **ctrl+c** to close the FastAPI server and the app
+## Closing the app
+### In both terminals press **ctrl+c** to close the FastAPI server and the app
 
 ## Contributors
 - Beloy, John Ernest M.

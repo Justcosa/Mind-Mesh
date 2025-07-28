@@ -42,7 +42,7 @@ flet run main.py
 ```
 
 ## Closing the app
-### In both terminals press ***ctrl+c*** to close the FastAPI server and the app
+### In both terminals, press ***ctrl+c*** to close the FastAPI server and the app
 
 ## Contributors
 - Beloy, John Ernest M.

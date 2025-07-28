@@ -36,7 +36,7 @@ python fastAPI/journalAPI.py
 ```
 
 2. Run the main.py file
-You will need to open a new terminal window to run the file.
+***(You will need to open a new terminal window to run the file.)***
 ```bash
 flet run main.py
 ```

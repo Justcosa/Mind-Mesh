@@ -1,42 +1,49 @@
-import flet as ft
+import requests
+import matplotlib.pyplot as plt
+from collections import Counter
+from datetime import datetime
 import os
-from mplib.stats import plot_logs_per_month
-from utils.colors import customBgColor, customTextcolor2
 
-class statsPage(ft.Container):
-    def __init__(self, page: ft.Page):
-        super().__init__()
-        self.expand = True
-        self.bgcolor = customBgColor
+def plot_logs_per_month(api_url="http://localhost:8081/journals/"):
+    img_path = "statPics/logs_per_month.png"
+    # Check if the image already exists
+    if os.path.exists(img_path):
+        return
 
-        def go_to_startup(e):
-            page.go("/startup")
+    try:
+        response = requests.get(api_url)
+        if response.status_code == 200:
+            entries = response.json()
+        else:
+            print(f"Error: {response.text}")
+            return
+    except Exception as ex:
+        print(f"Failed to connect to the server: {ex}")
+        return
 
-        # Generate and save the plot as an image
-        img_path = "statPics/logs_per_month.png"
-        plot_logs_per_month()  # This will save the image to img_path
+    # Extract year-month from each entry's date
+    months = []
+    for entry in entries:
+        date_str = entry.get("date", "")
+        try:
+            dt = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
+            months.append(dt.strftime("%Y-%m"))
+        except Exception:
+            continue
 
-        # Check if the image exists before displaying
-        image_control = (
-            ft.Image(src=img_path, width=600, height=300, fit=ft.ImageFit.CONTAIN)
-            if os.path.exists(img_path)
-            else ft.Text("No statistics available.", color="red")
-        )
+    # Count logs per month
+    month_counts = Counter(months)
+    sorted_months = sorted(month_counts.keys())
+    counts = [month_counts[month] for month in sorted_months]
 
-        self.content = ft.Row(
-            alignment=ft.MainAxisAlignment.CENTER,
-            vertical_alignment=ft.CrossAxisAlignment.CENTER,
-            controls=[
-                ft.Container(
-                    content=ft.Column(
-                        alignment=ft.MainAxisAlignment.CENTER,
-                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                        controls=[
-                            ft.Text("Logs per Month", color=customTextcolor2, size=30, weight=ft.FontWeight.BOLD),
-                            image_control,
-                            ft.ElevatedButton("Back to Startup", on_click=go_to_startup)
-                        ]
-                    )
-                )
-            ]
-        )
+    # Plot using matplotlib
+    plt.figure(figsize=(8, 4))
+    plt.bar(sorted_months, counts, color="skyblue")
+    plt.xlabel("Month")
+    plt.ylabel("Number of Logs")
+    plt.title("Journal Logs per Month")
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    os.makedirs(os.path.dirname(img_path), exist_ok=True)  # <-- Add this line
+    plt.savefig(img_path)
+    plt.close()

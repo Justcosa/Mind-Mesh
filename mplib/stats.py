@@ -44,6 +44,6 @@ def plot_logs_per_month(api_url="http://localhost:8081/journals/"):
     plt.title("Journal Logs per Month")
     plt.xticks(rotation=45)
     plt.tight_layout()
-    os.makedirs(os.path.dirname(img_path), exist_ok=True)  # <-- Add this line
+    os.makedirs(os.path.dirname(img_path), exist_ok=True)
     plt.savefig(img_path)
     plt.close()

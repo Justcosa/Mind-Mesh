@@ -1,10 +1,12 @@
 import flet as ft
 import requests
+from utils.colors import customBgColor, customTextcolor2
 
 class resources(ft.Container):
     def __init__(self, page: ft.Page):
         super().__init__()
         self.expand = True
+        self.bgcolor = customBgColor
 
         def go_to_startup(e):
             page.go("/startup")
@@ -26,10 +28,10 @@ class resources(ft.Container):
                 return ft.Text("No data found.", color="red")
             columns = [key for key in items[0].keys() if key != 'IndicatorCode']
             return ft.DataTable(
-                columns=[ft.DataColumn(ft.Text(col)) for col in columns],
+                columns=[ft.DataColumn(ft.Text(col, color=customTextcolor2)) for col in columns],
                 rows=[
                     ft.DataRow(
-                        cells=[ft.DataCell(ft.Text(str(item[col]))) for col in columns]
+                        cells=[ft.DataCell(ft.Text(str(item[col]), color=customTextcolor2)) for col in columns]
                     )
                     for item in items
                 ],
@@ -39,15 +41,30 @@ class resources(ft.Container):
         items = fetch_data()
         data_table = build_table(items)
 
+        # Wrap the table in a scrollable container
+        scrollable_table = ft.Container(
+            content=ft.Column(
+                controls=[data_table],
+                scroll=ft.ScrollMode.AUTO
+            ),
+            height=500,
+            width=900,
+            bgcolor=customBgColor,
+            border_radius=10,
+            padding=10
+        )
+
         self.content = ft.Row(
+            alignment=ft.MainAxisAlignment.CENTER,
+            vertical_alignment=ft.CrossAxisAlignment.CENTER,
             controls=[
                 ft.Container(
                     content=ft.Column(
                         alignment=ft.MainAxisAlignment.CENTER,
                         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                         controls=[
-                            ft.Text("Online resources", color="black", size=30, weight=ft.FontWeight.BOLD),
-                            data_table,
+                            ft.Text("Online resources", color=customTextcolor2, size=30, weight=ft.FontWeight.BOLD),
+                            scrollable_table,
                             ft.ElevatedButton("Back to Startup", on_click=go_to_startup)
                         ]
                     )

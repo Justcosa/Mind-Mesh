@@ -13,14 +13,18 @@ class logWindow(ft.Container):
 
         validator = validation()
 
-        mood_field = ft.TextField(label="Enter your mood here")
+        mood_field = ft.TextField(
+            label="Enter your mood here",
+            color=customTextcolor2 
+        )
         log_field = ft.TextField(
             label="Journal Entry",
             multiline=True,
             min_lines=10,
             max_lines=50,
-            width=400,      # Set a wider field
-            height=100      # Set a taller field
+            width=400,
+            height=100,
+            color=customTextcolor2 
         )
         validation_text = ft.Text("", color="red")
 
